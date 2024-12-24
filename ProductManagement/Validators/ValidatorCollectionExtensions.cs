@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 using ProductManagement.DTOs;
-using ProductManagement.Validators;
 
-namespace ProductManagement.Services
+namespace ProductManagement.Validators
 {
     public static class ValidatorCollectionExtensions
     {

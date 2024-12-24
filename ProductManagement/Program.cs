@@ -2,8 +2,10 @@ using DataAccessLayer.AccessLayer;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using ProductManagement.Infrastructure.Mapping;
+using ProductManagement.Mappings;
+using ProductManagement.Repositories;
 using ProductManagement.Services;
+using ProductManagement.Validators;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,8 +26,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddValidators();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

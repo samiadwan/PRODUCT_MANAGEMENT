@@ -2,7 +2,7 @@
 using DataAccessLayer.AccessLayer.Models;
 using ProductManagement.DTOs;
 
-namespace ProductManagement.Infrastructure.Mapping
+namespace ProductManagement.Mappings
 {
     public class MappingProfile : Profile
     {
@@ -12,7 +12,7 @@ namespace ProductManagement.Infrastructure.Mapping
             CreateMap<Order, OrderDto>().ReverseMap();
             CreateMap<OrderItem, OrderItemDto>().ReverseMap();
             CreateMap<Address, AddressDTO>().ReverseMap();
-            CreateMap<Product, ProductDto>().ReverseMap();  
+            CreateMap<Product, ProductDto>().ReverseMap();
         }
     }
 }

@@ -1,10 +1,6 @@
-﻿using AutoMapper;
-using DataAccessLayer.AccessLayer;
-using DataAccessLayer.AccessLayer.Models;
-using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProductManagement.DTOs;
+using ProductManagement.Services;
 
 namespace ProductManagement.Controllers
 {
@@ -12,52 +8,40 @@ namespace ProductManagement.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IValidator<OrderDto> _validator;
-        private readonly IMapper _mapper;
+        private readonly IOrderService _orderService;
+        private readonly IUserService _userService;
 
-        public OrderController(ApplicationDbContext context, IMapper mapper, IValidator<OrderDto> validator)
+        public OrderController(IOrderService orderService, IUserService userService)
         {
-            _context = context;
-            _mapper = mapper;
-            _validator = validator;
+           _orderService = orderService;
+            _userService = userService;
         }        
 
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
-            var orders = await _context.Orders.Include(o => o.User).Include(o => o.OrderItems).ToListAsync();
-            var orderDtos = _mapper.Map<List<OrderDto>>(orders);
-            return Ok(orderDtos);
+            var orders = await _orderService.GetOrdersAsync();
+            return Ok(orders);
         }
  
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderById(int id)
         {
-            var order = await _context.Orders
-                .Include(o => o.User)
-                .Include(o => o.OrderItems)
-                .FirstOrDefaultAsync(o => o.Id == id);
+            var order = await _orderService.GetOrderByIdAsync(id);
 
             if (order == null)
             {
                 return NotFound();
             }
-            var orderDto = _mapper.Map<List<OrderDto>>(order);
-            return Ok(orderDto);
+            return Ok(order);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] OrderDto orderDto)
-        {
-            var validationResult = _validator.Validate(orderDto);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
+        {          
 
-            var userExists = await _context.Users.AnyAsync(u => u.Id == orderDto.UserId);
-            if (!userExists)
+            var userExists = await _userService.GetUserByIdAsync((int)orderDto.UserId);
+            if (userExists == null)
             {
                 return BadRequest(new
                 {
@@ -67,12 +51,8 @@ namespace ProductManagement.Controllers
                     }
                 });
             }
-            var order = _mapper.Map<Order>(orderDto);
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            var createdOrderDto = _mapper.Map<OrderDto>(order);
-            return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, createdOrderDto);
+           var createOrder = await _orderService.CreateOrderAsync(orderDto);
+            return CreatedAtAction(nameof(GetOrderById), new { id = createOrder.Id }, createOrder);
         }
     }
 }
