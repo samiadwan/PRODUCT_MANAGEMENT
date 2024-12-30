@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DataAccessLayer.AccessLayer.Models;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 using ProductManagement.DTOs;
 using ProductManagement.Repositories;
 using ProductManagement.Services;
+using ProductManagement.Validators;
 
 
 namespace ProductManagement.UnitTests
@@ -14,14 +16,14 @@ namespace ProductManagement.UnitTests
         private readonly Mock<IUserRepository> _mockUserRepository;
         private readonly UserService _userService;
         private readonly Mock<IMapper> _mapper;
-        private readonly Mock<IValidator<UserDto>> _validator;
+        private readonly UserValidator _validator;
 
         public UserServiceTests()
         {
             _mockUserRepository = new Mock<IUserRepository>();
             _mapper = new Mock<IMapper>();
-            _validator = new Mock<IValidator<UserDto>>();
-            _userService = new UserService(_mockUserRepository.Object, _mapper.Object, _validator.Object);
+            _validator = new UserValidator();
+            _userService = new UserService(_mockUserRepository.Object, _mapper.Object, _validator);
         }
 
         [Fact]
