@@ -5,7 +5,7 @@ VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManagement", "ProductManagement.csproj", "{2E64AF47-6FAE-44A5-AC7F-C6A58EA83176}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "..\ClassLibrary1\DataAccessLayer.csproj", "{1EC79522-357D-4C48-A0EC-82C217AC38B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "..\DataAccessLayer\DataAccessLayer.csproj", "{1EC79522-357D-4C48-A0EC-82C217AC38B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManagement.UnitTests", "..\UnitTest\ProductManagement.UnitTests\ProductManagement.UnitTests.csproj", "{281976FB-71D8-4156-BB11-B312B34ED7D0}"
 EndProject
